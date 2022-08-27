@@ -13,7 +13,6 @@
 *.log
 *.pem
 *.tsbuildinfo
-assets
 build
 coverage
 dist
