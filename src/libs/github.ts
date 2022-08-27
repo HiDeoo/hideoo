@@ -67,7 +67,7 @@ async function fetchUserData() {
   return json.data
 }
 
-interface GitHubStats {
+export interface GitHubStats {
   contributions: {
     count: number
     date: Date // yyyy-MM

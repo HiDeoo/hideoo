@@ -4,7 +4,6 @@
   "license": "MIT",
   "description": "",
   "author": "HiDeoo <github@hideoo.dev> (https://hideoo.dev)",
-  "type": "module",
   "scripts": {
     "start": "tsx src",
     "lint": "prettier -c . && eslint . --max-warnings=0 && tsc --noEmit",
@@ -13,7 +12,8 @@
   "dependencies": {
     "date-fns": "2.29.2",
     "dotenv-flow": "3.2.0",
-    "node-fetch": "3.2.10"
+    "node-fetch": "3.2.10",
+    "quickchart-js": "3.0.2"
   },
   "devDependencies": {
     "@hideoo/eslint-config": "0.6.0",
