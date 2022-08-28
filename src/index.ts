@@ -2,7 +2,7 @@ import dotenv from 'dotenv-flow'
 
 import { getStatsChartData } from './libs/chart'
 import { fetchGitHubStats } from './libs/github'
-import { generateStatsChart } from './svg'
+import { generateStatsChart } from './libs/svg'
 
 dotenv.config()
 

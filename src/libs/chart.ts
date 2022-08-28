@@ -7,7 +7,10 @@ import { CONFIG } from '../config'
 import { type GitHubStats } from './github'
 
 export async function getStatsChartData({ gitHub }: Stats) {
-  const chart = getNewChart(CONFIG.charts.stats.width)
+  const chart = getNewChart(
+    CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2,
+    CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2
+  )
 
   chart.setConfig({
     data: {
@@ -16,6 +19,12 @@ export async function getStatsChartData({ gitHub }: Stats) {
           ...getNewDataSet(CONFIG.charts.stats.gitHub),
           data: gitHub.contributions.map((contribution) => contribution.count),
           fill: 'origin',
+        },
+        {
+          ...getNewDataSet(CONFIG.charts.stats.npm),
+          // FIXME(HiDeoo)
+          data: gitHub.contributions.map((contribution) => contribution.count + 100),
+          fill: '-1',
         },
       ],
       labels: gitHub.contributions.map((contribution) => format(new Date(contribution.date), 'yyyy-MM')),
@@ -42,13 +51,14 @@ export async function getStatsChartData({ gitHub }: Stats) {
   return chart.toDataUrl()
 }
 
-function getNewChart(width: number) {
+function getNewChart(width: number, height: number) {
   const chart = new QuickChart()
   // TODO(HiDeoo)
   // chart.setBackgroundColor(CONFIG.charts.backgroundColor)
   chart.setDevicePixelRatio(CONFIG.charts.devicePixelRatio)
   chart.setVersion('3')
   chart.setWidth(width)
+  chart.setHeight(height)
 
   return chart
 }
