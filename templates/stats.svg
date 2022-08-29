@@ -44,7 +44,7 @@
   <line x1="__LEGEND_SEPARATOR_X__" y1="0" x2="__LEGEND_SEPARATOR_X__" y2="100%" stroke="__SEPARATOR_COLOR__" />
   <text class="legend" x="__LEGEND_X__" y="__LEGEND_Y__">
     <tspan class="legendNpmDownloadsTitle" x="__LEGEND_X__" dy="__LEGEND_Y__">npm downloads</tspan>
-    <tspan class="legendNpmDownloadsValue" x="__LEGEND_X__" dy="1.2em">XXX K</tspan>
+    <tspan class="legendNpmDownloadsValue" x="__LEGEND_X__" dy="1.2em">__NPM_DOWNLOADS__</tspan>
     <tspan class="legendContributionsTitle" x="__LEGEND_X__" dy="2.6em">contributions</tspan>
     <tspan class="legendContributionsValue" x="__LEGEND_X__" dy="1.2em">__GITHUB_CONTRIBUTIONS__</tspan>
   </text>

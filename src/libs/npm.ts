@@ -26,7 +26,7 @@ export async function fetchNpmStats(): Promise<NpmStats> {
   const pkgs = await fetchPackages(process.env.NPM_LOGIN)
   const downloads = await fetchPackagesDownloads(pkgs)
 
-  return { downloads }
+  return { downloads, totalDownloads: downloads.reduce((total, { count }) => total + count, 0) }
 }
 
 async function fetchPackages(author: string): Promise<string[]> {
@@ -113,6 +113,7 @@ export interface NpmStats {
     count: number
     date: Date // yyyy-MM
   }[]
+  totalDownloads: number
 }
 
 interface NpmSearchResult {

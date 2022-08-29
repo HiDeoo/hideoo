@@ -2,10 +2,8 @@ import { type User } from '@octokit/graphql-schema'
 import { addMinutes, endOfDay, format, startOfMonth, subDays, subMonths } from 'date-fns'
 import fetch from 'node-fetch'
 
-export async function fetchGitHubStats(): Promise<GitHubStats> {
-  const { contributions, totalContributions } = await fetchContributions()
-
-  return { contributions, totalContributions }
+export function fetchGitHubStats(): Promise<GitHubStats> {
+  return fetchContributions()
 }
 
 async function fetchContributions() {

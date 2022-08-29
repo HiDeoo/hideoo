@@ -33,6 +33,7 @@ export async function generateStatsChart(stats: Stats, statsChartData: string) {
         CONFIG.charts.stats.offset
     ),
     LEGEND_Y: String(CONFIG.charts.stats.wrapperBorder + CONFIG.charts.stats.legend.margin),
+    NPM_DOWNLOADS: String(stats.npm.totalDownloads),
     SEPARATOR_COLOR: CONFIG.charts.separatorColor,
     VIEW_BOX_HEIGHT: String(CONFIG.charts.stats.height),
     VIEW_BOX_WIDTH: String(CONFIG.charts.stats.width),
