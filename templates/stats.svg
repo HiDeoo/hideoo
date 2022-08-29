@@ -39,9 +39,9 @@
       fill: __LEGEND_NPM_VALUE_COLOR__;
     }
   </style>
+  <image xlink:href="__CHART_DATA__" x="__CHART_OFFSET__" y="1" width="__CHART_WIDTH__" height="__CHART_HEIGHT__" />
   <rect class="wrapper" x="0.5" y="0.5" width="__WRAPPER_WIDTH__" height="__WRAPPER_HEIGHT__" rx="6" />
-  <image xlink:href="__CHART_DATA__" x="1" y="1" width="__CHART_WIDTH__" height="__CHART_HEIGHT__" />
-  <line x1="__CHART_WIDTH__" y1="0" x2="__CHART_WIDTH__" y2="100%" stroke="__SEPARATOR_COLOR__" />
+  <line x1="__LEGEND_SEPARATOR_X__" y1="0" x2="__LEGEND_SEPARATOR_X__" y2="100%" stroke="__SEPARATOR_COLOR__" />
   <text class="legend" x="__LEGEND_X__" y="__LEGEND_Y__">
     <tspan class="legendNpmDownloadsTitle" x="__LEGEND_X__" dy="__LEGEND_Y__">npm downloads</tspan>
     <tspan class="legendNpmDownloadsValue" x="__LEGEND_X__" dy="1.2em">XXX K</tspan>

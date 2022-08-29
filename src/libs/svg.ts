@@ -7,6 +7,7 @@ export async function generateStatsChart(statsChartData: string) {
   return generateChart(CONFIG.charts.stats.fileName, {
     CHART_DATA: statsChartData,
     CHART_HEIGHT: String(CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2),
+    CHART_OFFSET: String(CONFIG.charts.stats.offset),
     CHART_WIDTH: String(
       CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2
     ),
@@ -14,11 +15,19 @@ export async function generateStatsChart(statsChartData: string) {
     LEGEND_GITHUB_VALUE_COLOR: CONFIG.charts.stats.gitHub.borderColor,
     LEGEND_NPM_TITLE_COLOR: CONFIG.charts.stats.npm.backgroundColor,
     LEGEND_NPM_VALUE_COLOR: CONFIG.charts.stats.npm.borderColor,
+    LEGEND_SEPARATOR_X: String(
+      CONFIG.charts.stats.width -
+        CONFIG.charts.stats.legend.width -
+        CONFIG.charts.stats.wrapperBorder * 2 +
+        CONFIG.charts.stats.offset -
+        3
+    ),
     LEGEND_X: String(
       CONFIG.charts.stats.width -
         CONFIG.charts.stats.legend.width -
         CONFIG.charts.stats.wrapperBorder * 2 +
-        CONFIG.charts.stats.legend.margin
+        CONFIG.charts.stats.legend.margin +
+        CONFIG.charts.stats.offset
     ),
     LEGEND_Y: String(CONFIG.charts.stats.wrapperBorder + CONFIG.charts.stats.legend.margin),
     SEPARATOR_COLOR: CONFIG.charts.separatorColor,

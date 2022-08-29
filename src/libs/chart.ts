@@ -19,17 +19,27 @@ export async function getStatsChartData({ gitHub }: Stats) {
           ...getNewDataSet(CONFIG.charts.stats.gitHub),
           data: gitHub.contributions.map((contribution) => contribution.count),
           fill: 'origin',
+          yAxisID: 'yContributionAxis',
         },
         {
           ...getNewDataSet(CONFIG.charts.stats.npm),
           // FIXME(HiDeoo)
-          data: gitHub.contributions.map((contribution) => contribution.count + 100),
+          data: gitHub.contributions.map((contribution) => contribution.count + 1000 + Math.floor(Math.random() * 500)),
           fill: '-1',
+          yAxisID: 'yDownloadAxis',
         },
       ],
-      labels: gitHub.contributions.map((contribution) => format(new Date(contribution.date), 'yyyy-MM')),
+      labels: gitHub.contributions.map((contribution, index) =>
+        index % 2 !== 0 ? format(new Date(contribution.date), 'MMM yyyy') : ''
+      ),
     },
     options: {
+      layout: {
+        padding: {
+          bottom: 5,
+          top: 5,
+        },
+      },
       plugins: {
         legend: {
           display: false,
@@ -37,10 +47,53 @@ export async function getStatsChartData({ gitHub }: Stats) {
       },
       scales: {
         xAxis: {
+          grid: {
+            display: false,
+          },
           ticks: {
+            autoSkip: false,
+            color: CONFIG.charts.tickColor,
             maxRotation: 0,
-            maxTicksLimit: 7,
             minRotation: 0,
+          },
+        },
+        yContributionAxis: {
+          grid: {
+            color: CONFIG.charts.separatorColor,
+            drawBorder: false,
+            drawTicks: false,
+          },
+          position: 'left',
+          stack: 'prout',
+          ticks: {
+            callback: (val, index) => {
+              return index === 0 ? '' : val
+            },
+            color: CONFIG.charts.tickColor,
+            count: CONFIG.charts.stats.yAxis.tickCount,
+            labelOffset: CONFIG.charts.stats.yAxis.labelOffset,
+            mirror: true,
+            padding: 9,
+          },
+        },
+        yDownloadAxis: {
+          grid: {
+            color: CONFIG.charts.separatorColor,
+            drawBorder: false,
+            drawTicks: false,
+          },
+          min: 0,
+          position: 'right',
+          stack: 'prout',
+          ticks: {
+            callback: (val, index) => {
+              return index === 0 ? '' : val
+            },
+            color: CONFIG.charts.tickColor,
+            count: CONFIG.charts.stats.yAxis.tickCount,
+            labelOffset: CONFIG.charts.stats.yAxis.labelOffset,
+            mirror: true,
+            padding: -5,
           },
         },
       },
@@ -53,8 +106,7 @@ export async function getStatsChartData({ gitHub }: Stats) {
 
 function getNewChart(width: number, height: number) {
   const chart = new QuickChart()
-  // TODO(HiDeoo)
-  // chart.setBackgroundColor(CONFIG.charts.backgroundColor)
+  chart.setBackgroundColor(CONFIG.charts.backgroundColor)
   chart.setDevicePixelRatio(CONFIG.charts.devicePixelRatio)
   chart.setVersion('3')
   chart.setWidth(width)
