@@ -67,7 +67,7 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
             drawTicks: false,
           },
           min: 0,
-          max: Math.max(...gitHubContributions) * 2,
+          max: Math.round((Math.max(...gitHubContributions) * 2) / 10) * 10,
           position: 'left',
           ticks: {
             callback: (val, index) => {
