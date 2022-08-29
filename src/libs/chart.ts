@@ -129,7 +129,7 @@ function getNewDataSet(options: Partial<ChartDataset> = {}) {
   }
 }
 
-interface Stats {
+export interface Stats {
   gitHub: GitHubStats
   npm: NpmStats
 }

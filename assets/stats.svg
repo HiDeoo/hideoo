@@ -46,6 +46,6 @@
     <tspan class="legendNpmDownloadsTitle" x="598" dy="11">npm downloads</tspan>
     <tspan class="legendNpmDownloadsValue" x="598" dy="1.2em">XXX K</tspan>
     <tspan class="legendContributionsTitle" x="598" dy="2.6em">contributions</tspan>
-    <tspan class="legendContributionsValue" x="598" dy="1.2em">XXX K</tspan>
+    <tspan class="legendContributionsValue" x="598" dy="1.2em">2532</tspan>
   </text>
 </svg>

@@ -23,13 +23,13 @@ export async function fetchNpmStats(): Promise<NpmStats> {
   //   ].reverse(),
   // })
 
-  const pkgs = await fetchNpmPackages(process.env.NPM_LOGIN)
-  const downloads = await fetchNpmPackagesDownloads(pkgs)
+  const pkgs = await fetchPackages(process.env.NPM_LOGIN)
+  const downloads = await fetchPackagesDownloads(pkgs)
 
   return { downloads }
 }
 
-async function fetchNpmPackages(author: string): Promise<string[]> {
+async function fetchPackages(author: string): Promise<string[]> {
   const url = new URL('https://registry.npmjs.org/-/v1/search')
   url.search = new URLSearchParams({ size: '250', text: `maintainer:${author}` }).toString()
 
@@ -46,7 +46,7 @@ async function fetchNpmPackages(author: string): Promise<string[]> {
   })
 }
 
-async function fetchNpmPackagesDownloads(pkgs: string[]): Promise<NpmStats['downloads']> {
+async function fetchPackagesDownloads(pkgs: string[]): Promise<NpmStats['downloads']> {
   const downloads: Record<string, number> = {}
 
   const periods = getLastYearPeriods()

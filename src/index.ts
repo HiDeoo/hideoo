@@ -1,6 +1,6 @@
 import dotenv from 'dotenv-flow'
 
-import { getStatsChartData } from './libs/chart'
+import { getStatsChartData, type Stats } from './libs/chart'
 import { fetchGitHubStats } from './libs/github'
 import { fetchNpmStats } from './libs/npm'
 import { generateStatsChart } from './libs/svg'
@@ -12,9 +12,11 @@ async function run() {
     const gitHub = await fetchGitHubStats()
     const npm = await fetchNpmStats()
 
-    const statsChartData = await getStatsChartData({ gitHub, npm })
+    const stats: Stats = { gitHub, npm }
 
-    generateStatsChart(statsChartData)
+    const statsChartData = await getStatsChartData(stats)
+
+    generateStatsChart(stats, statsChartData)
   } catch (error) {
     console.error(error)
 

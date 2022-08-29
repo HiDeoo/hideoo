@@ -3,28 +3,37 @@ import { addMinutes, endOfDay, format, startOfMonth, subDays, subMonths } from '
 import fetch from 'node-fetch'
 
 export async function fetchGitHubStats(): Promise<GitHubStats> {
+  const { contributions, totalContributions } = await fetchContributions()
+
+  return { contributions, totalContributions }
+}
+
+async function fetchContributions() {
   let to = new Date()
   let from = startOfMonth(subMonths(to, 11))
 
-  const elevenMonthsData = await fetchUserData(from, to)
+  const elevenMonthsData = await fetchContributionsBetween(from, to)
 
   to = endOfDay(subDays(from, 1))
   from = startOfMonth(to)
 
-  const twelfthMonthData = await fetchUserData(from, to)
+  const twelfthMonthData = await fetchContributionsBetween(from, to)
 
-  return parseGitHubData(mergeGitHubData(elevenMonthsData, twelfthMonthData))
+  return parseContributions(mergeContributions(elevenMonthsData, twelfthMonthData))
 }
 
-function mergeGitHubData(dataLeft: GitHubUserData, dataRight: GitHubUserData) {
+function mergeContributions(dataLeft: GitHubUserData, dataRight: GitHubUserData) {
   dataLeft.user.contributionsCollection.contributionCalendar.weeks.unshift(
     ...dataRight.user.contributionsCollection.contributionCalendar.weeks
   )
 
+  dataLeft.user.contributionsCollection.contributionCalendar.totalContributions +=
+    dataRight.user.contributionsCollection.contributionCalendar.totalContributions
+
   return dataLeft
 }
 
-function parseGitHubData(data: GitHubUserData): GitHubStats {
+function parseContributions(data: GitHubUserData): GitHubStats {
   const contributions: GitHubStats['contributions'] = []
 
   for (const contributionWeek of data.user.contributionsCollection.contributionCalendar.weeks) {
@@ -41,10 +50,13 @@ function parseGitHubData(data: GitHubUserData): GitHubStats {
     }
   }
 
-  return { contributions }
+  return {
+    contributions,
+    totalContributions: data.user.contributionsCollection.contributionCalendar.totalContributions,
+  }
 }
 
-async function fetchUserData(from: Date, to: Date) {
+async function fetchContributionsBetween(from: Date, to: Date) {
   console.info('Fetching GitHub user data')
 
   const response = await fetch('https://api.github.com/graphql', {
@@ -58,6 +70,7 @@ async function fetchUserData(from: Date, to: Date) {
           user(login: $login) {
             contributionsCollection(from: $from, to: $to) {
               contributionCalendar {
+                totalContributions
                 weeks {
                   contributionDays {
                     contributionCount
@@ -92,6 +105,7 @@ export interface GitHubStats {
     count: number
     date: Date // yyyy-MM
   }[]
+  totalContributions: number
 }
 
 interface GitHubUserData {

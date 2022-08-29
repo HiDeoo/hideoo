@@ -46,6 +46,6 @@
     <tspan class="legendNpmDownloadsTitle" x="__LEGEND_X__" dy="__LEGEND_Y__">npm downloads</tspan>
     <tspan class="legendNpmDownloadsValue" x="__LEGEND_X__" dy="1.2em">XXX K</tspan>
     <tspan class="legendContributionsTitle" x="__LEGEND_X__" dy="2.6em">contributions</tspan>
-    <tspan class="legendContributionsValue" x="__LEGEND_X__" dy="1.2em">XXX K</tspan>
+    <tspan class="legendContributionsValue" x="__LEGEND_X__" dy="1.2em">__GITHUB_CONTRIBUTIONS__</tspan>
   </text>
 </svg>

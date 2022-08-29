@@ -3,7 +3,9 @@ import path from 'node:path'
 
 import { CONFIG } from '../config'
 
-export async function generateStatsChart(statsChartData: string) {
+import { type Stats } from './chart'
+
+export async function generateStatsChart(stats: Stats, statsChartData: string) {
   return generateChart(CONFIG.charts.stats.fileName, {
     CHART_DATA: statsChartData,
     CHART_HEIGHT: String(CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2),
@@ -11,6 +13,7 @@ export async function generateStatsChart(statsChartData: string) {
     CHART_WIDTH: String(
       CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2
     ),
+    GITHUB_CONTRIBUTIONS: String(stats.gitHub.totalContributions),
     LEGEND_GITHUB_TITLE_COLOR: CONFIG.charts.stats.gitHub.backgroundColor,
     LEGEND_GITHUB_VALUE_COLOR: CONFIG.charts.stats.gitHub.borderColor,
     LEGEND_NPM_TITLE_COLOR: CONFIG.charts.stats.npm.backgroundColor,
