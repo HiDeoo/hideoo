@@ -29,6 +29,8 @@ function parseGitHubData(data: GitHubUserData): GitHubStats {
 }
 
 async function fetchUserData() {
+  console.info('Fetching GitHub user data')
+
   const response = await fetch('https://api.github.com/graphql', {
     headers: {
       Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
@@ -59,7 +61,7 @@ async function fetchUserData() {
   })
 
   if (!response.ok) {
-    throw new Error(response.statusText)
+    throw new Error(`${response.status}: ${response.statusText} while fetching GitHub user data.`)
   }
 
   const json = (await response.json()) as { data: GitHubUserData }

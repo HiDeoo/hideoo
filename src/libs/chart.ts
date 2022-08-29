@@ -5,26 +5,29 @@ import QuickChart from 'quickchart-js'
 import { CONFIG } from '../config'
 
 import { type GitHubStats } from './github'
+import { type NpmStats } from './npm'
 
-export async function getStatsChartData({ gitHub }: Stats) {
+export async function getStatsChartData({ gitHub, npm }: Stats) {
   const chart = getNewChart(
     CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2,
     CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2
   )
+
+  const gitHubContributions = gitHub.contributions.map((contribution) => contribution.count)
+  const npmDownloads = npm.downloads.map((download) => download.count)
 
   chart.setConfig({
     data: {
       datasets: [
         {
           ...getNewDataSet(CONFIG.charts.stats.gitHub),
-          data: gitHub.contributions.map((contribution) => contribution.count),
+          data: gitHubContributions,
           fill: 'origin',
           yAxisID: 'yContributionAxis',
         },
         {
           ...getNewDataSet(CONFIG.charts.stats.npm),
-          // FIXME(HiDeoo)
-          data: gitHub.contributions.map((contribution) => contribution.count + 1000 + Math.floor(Math.random() * 500)),
+          data: npmDownloads,
           fill: '-1',
           yAxisID: 'yDownloadAxis',
         },
@@ -63,8 +66,9 @@ export async function getStatsChartData({ gitHub }: Stats) {
             drawBorder: false,
             drawTicks: false,
           },
+          min: 0,
+          max: Math.max(...gitHubContributions) * 2,
           position: 'left',
-          stack: 'prout',
           ticks: {
             callback: (val, index) => {
               return index === 0 ? '' : val
@@ -74,6 +78,7 @@ export async function getStatsChartData({ gitHub }: Stats) {
             labelOffset: CONFIG.charts.stats.yAxis.labelOffset,
             mirror: true,
             padding: 9,
+            precision: 0,
           },
         },
         yDownloadAxis: {
@@ -84,7 +89,6 @@ export async function getStatsChartData({ gitHub }: Stats) {
           },
           min: 0,
           position: 'right',
-          stack: 'prout',
           ticks: {
             callback: (val, index) => {
               return index === 0 ? '' : val
@@ -94,6 +98,7 @@ export async function getStatsChartData({ gitHub }: Stats) {
             labelOffset: CONFIG.charts.stats.yAxis.labelOffset,
             mirror: true,
             padding: -5,
+            precision: 0,
           },
         },
       },
@@ -126,4 +131,5 @@ function getNewDataSet(options: Partial<ChartDataset> = {}) {
 
 interface Stats {
   gitHub: GitHubStats
+  npm: NpmStats
 }
