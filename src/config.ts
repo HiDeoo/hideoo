@@ -5,14 +5,18 @@ export const CONFIG = {
     separatorColor: '#ff0fff',
     stats: {
       fileName: 'stats.svg',
-      height: 300,
+      height: 220,
       gitHub: {
         backgroundColor: 'rgba(64, 196, 99, 0.3)',
         borderColor: '#39d353',
       },
       legend: {
-        margin: 10,
-        width: 240,
+        color: '#5000ff',
+        margin: {
+          x: 14,
+          y: 18,
+        },
+        width: 180,
       },
       offset: -20,
       npm: {
