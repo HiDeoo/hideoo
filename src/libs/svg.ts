@@ -7,13 +7,14 @@ import { type Stats } from './chart'
 
 export async function generateStatsChart(stats: Stats, statsChartData: string) {
   const now = new Date()
+  const numberFormatter = Intl.NumberFormat('en', { notation: 'compact' })
 
   return generateChart(CONFIG.charts.stats.fileName, {
     CHART_DATA: statsChartData,
     CHART_HEIGHT: CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2,
     CHART_OFFSET: CONFIG.charts.stats.offset,
     CHART_WIDTH: CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2,
-    GITHUB_CONTRIBUTIONS: stats.gitHub.totalContributions,
+    GITHUB_CONTRIBUTIONS: numberFormatter.format(stats.gitHub.totalContributions),
     LEGEND_GITHUB_TITLE_COLOR: CONFIG.charts.stats.gitHub.backgroundColor,
     LEGEND_GITHUB_VALUE_COLOR: CONFIG.charts.stats.gitHub.borderColor,
     LEGEND_NPM_TITLE_COLOR: CONFIG.charts.stats.npm.backgroundColor,
@@ -32,7 +33,7 @@ export async function generateStatsChart(stats: Stats, statsChartData: string) {
       CONFIG.charts.stats.offset,
     LEGEND_Y: CONFIG.charts.stats.wrapperBorder + CONFIG.charts.stats.legend.margin.y,
     LEGEND_YEARS_COLOR: CONFIG.charts.stats.legend.color,
-    NPM_DOWNLOADS: stats.npm.totalDownloads,
+    NPM_DOWNLOADS: numberFormatter.format(stats.npm.totalDownloads),
     SEPARATOR_COLOR: CONFIG.charts.separatorColor,
     VIEW_BOX_HEIGHT: CONFIG.charts.stats.height,
     VIEW_BOX_WIDTH: CONFIG.charts.stats.width,

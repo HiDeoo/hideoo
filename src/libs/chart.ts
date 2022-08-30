@@ -71,7 +71,7 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
           position: 'left',
           ticks: {
             callback: (val, index) => {
-              return index === 0 ? '' : val
+              return index === 0 ? '' : Intl.NumberFormat('en', { notation: 'compact' }).format(Number(val))
             },
             color: CONFIG.charts.tickColor,
             count: CONFIG.charts.stats.yAxis.tickCount,
@@ -91,7 +91,7 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
           position: 'right',
           ticks: {
             callback: (val, index) => {
-              return index === 0 ? '' : val
+              return index === 0 ? '' : Intl.NumberFormat('en', { notation: 'compact' }).format(Number(val))
             },
             color: CONFIG.charts.tickColor,
             count: CONFIG.charts.stats.yAxis.tickCount,
