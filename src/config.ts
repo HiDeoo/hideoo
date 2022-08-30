@@ -59,7 +59,7 @@ export const CONFIG = {
         tickCount: 6,
       },
     },
-    tension: 0.275,
+    tension: 0.325,
   },
 }
 
