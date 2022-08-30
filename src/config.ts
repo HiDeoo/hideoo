@@ -8,13 +8,13 @@ export const CONFIG = {
         separator: '#30363d',
         stats: {
           gitHub: {
-            backgroundColor: 'rgba(38, 166, 65, 0.05)',
+            backgroundColor: 'rgba(38, 166, 65, 0.075)',
             borderColor: '#26a641',
             legendColor: 'rgba(71, 166, 91, 0.65)',
           },
           legend: '#8b949e',
           npm: {
-            backgroundColor: 'rgba(31, 111, 235, 0.05)',
+            backgroundColor: 'rgba(31, 111, 235, 0.075)',
             borderColor: '#1f6feb',
             legendColor: 'rgba(78, 139, 235, 0.65)',
           },
@@ -26,13 +26,13 @@ export const CONFIG = {
         separator: '#d0d7de',
         stats: {
           gitHub: {
-            backgroundColor: 'rgba(48, 161, 78, 0.05)',
+            backgroundColor: 'rgba(48, 161, 78, 0.075)',
             borderColor: '#30a14e',
             legendColor: 'rgba(81, 161, 102, 0.65)',
           },
           legend: '#57606a',
           npm: {
-            backgroundColor: 'rgba(9, 105, 218, 0.05)',
+            backgroundColor: 'rgba(9, 105, 218, 0.075)',
             borderColor: '#0969da',
             legendColor: 'rgba(52, 128, 218, 0.65)',
           },
@@ -47,9 +47,9 @@ export const CONFIG = {
       legend: {
         margin: {
           x: 14,
-          y: 18,
+          y: 17,
         },
-        width: 180,
+        width: 170,
       },
       offset: -20,
       width: 850,

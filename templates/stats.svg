@@ -24,7 +24,7 @@
 
     .legend tspan:first-child {
       fill: __LEGEND_YEARS_COLOR__;
-      font-size: 28px;
+      font-size: 25px;
       font-weight: 600;
     }
 
@@ -47,10 +47,10 @@
   <image xlink:href="__CHART_DATA__" x="__CHART_OFFSET__" y="1" width="__CHART_WIDTH__" height="__CHART_HEIGHT__" />
   <rect class="wrapper" x="0.5" y="0.5" width="__WRAPPER_WIDTH__" height="__WRAPPER_HEIGHT__" rx="6" />
   <line x1="__LEGEND_SEPARATOR_X__" y1="0" x2="__LEGEND_SEPARATOR_X__" y2="100%" stroke="__SEPARATOR_COLOR__" />
-  <line x1="__LEGEND_SEPARATOR_X__" y1="56" x2="100%" y2="56" stroke="__SEPARATOR_COLOR__" />
+  <line x1="__LEGEND_SEPARATOR_X__" y1="54" x2="100%" y2="54" stroke="__SEPARATOR_COLOR__" />
   <text class="legend" x="__LEGEND_X__" y="__LEGEND_Y__">
     <tspan x="__LEGEND_X__" dy="__LEGEND_Y__">__YEARS__</tspan>
-    <tspan class="legendNpmDownloadsTitle" x="__LEGEND_X__" dy="2.8em">npm downloads</tspan>
+    <tspan class="legendNpmDownloadsTitle" x="__LEGEND_X__" dy="3em">npm downloads</tspan>
     <tspan class="legendNpmDownloadsValue" x="__LEGEND_X__" dy="1.25em">__NPM_DOWNLOADS__</tspan>
     <tspan class="legendContributionsTitle" x="__LEGEND_X__" dy="2.2em">contributions</tspan>
     <tspan class="legendContributionsValue" x="__LEGEND_X__" dy="1.25em">__GITHUB_CONTRIBUTIONS__</tspan>
