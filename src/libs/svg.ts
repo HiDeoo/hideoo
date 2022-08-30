@@ -20,9 +20,9 @@ export async function generateStatsChart(stats: Stats) {
       CHART_OFFSET: CONFIG.charts.stats.offset,
       CHART_WIDTH: CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2,
       GITHUB_CONTRIBUTIONS: numberFormatter.format(stats.gitHub.totalContributions),
-      LEGEND_GITHUB_TITLE_COLOR: theme.stats.gitHub.backgroundColor,
+      LEGEND_GITHUB_TITLE_COLOR: theme.stats.gitHub.legendColor,
       LEGEND_GITHUB_VALUE_COLOR: theme.stats.gitHub.borderColor,
-      LEGEND_NPM_TITLE_COLOR: theme.stats.npm.backgroundColor,
+      LEGEND_NPM_TITLE_COLOR: theme.stats.npm.legendColor,
       LEGEND_NPM_VALUE_COLOR: theme.stats.npm.borderColor,
       LEGEND_SEPARATOR_X:
         CONFIG.charts.stats.width -

@@ -5,38 +5,42 @@ export const CONFIG = {
     colors: {
       dark: {
         background: 'transparent',
-        separator: '#ff0fff',
+        separator: '#30363d',
         stats: {
           gitHub: {
-            backgroundColor: 'rgba(64, 196, 99, 0.3)',
-            borderColor: '#39d353',
+            backgroundColor: 'rgba(38, 166, 65, 0.05)',
+            borderColor: '#26a641',
+            legendColor: 'rgba(71, 166, 91, 0.65)',
           },
-          legend: '#5000ff',
+          legend: '#8b949e',
           npm: {
-            backgroundColor: 'rgba(255, 196, 99, 0.3)',
-            borderColor: '#ffd353',
+            backgroundColor: 'rgba(31, 111, 235, 0.05)',
+            borderColor: '#1f6feb',
+            legendColor: 'rgba(78, 139, 235, 0.65)',
           },
         },
-        tick: '#009999',
+        tick: '#8b949e',
       },
       light: {
         background: 'transparent',
-        separator: '#ff0fff',
+        separator: '#d0d7de',
         stats: {
           gitHub: {
-            backgroundColor: 'rgba(64, 196, 99, 0.3)',
-            borderColor: '#39d353',
+            backgroundColor: 'rgba(48, 161, 78, 0.05)',
+            borderColor: '#30a14e',
+            legendColor: 'rgba(81, 161, 102, 0.65)',
           },
-          legend: '#5000ff',
+          legend: '#57606a',
           npm: {
-            backgroundColor: 'rgba(255, 196, 99, 0.3)',
-            borderColor: '#ffd353',
+            backgroundColor: 'rgba(9, 105, 218, 0.05)',
+            borderColor: '#0969da',
+            legendColor: 'rgba(52, 128, 218, 0.65)',
           },
         },
-        tick: '#009999',
+        tick: '#57606a',
       },
     },
-    devicePixelRatio: 1,
+    devicePixelRatio: 2,
     stats: {
       fileName: 'stats',
       height: 220,
