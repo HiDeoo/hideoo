@@ -2,15 +2,16 @@ import { type ChartDataset } from 'chart.js'
 import { format } from 'date-fns'
 import QuickChart from 'quickchart-js'
 
-import { CONFIG } from '../config'
+import { CONFIG, type Theme } from '../config'
 
 import { type GitHubStats } from './github'
 import { type NpmStats } from './npm'
 
-export async function getStatsChartData({ gitHub, npm }: Stats) {
+export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
   const chart = getNewChart(
     CONFIG.charts.stats.width - CONFIG.charts.stats.legend.width - CONFIG.charts.stats.wrapperBorder * 2,
-    CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2
+    CONFIG.charts.stats.height - CONFIG.charts.stats.wrapperBorder * 2,
+    theme.background
   )
 
   const gitHubContributions = gitHub.contributions.map((contribution) => contribution.count)
@@ -20,13 +21,13 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
     data: {
       datasets: [
         {
-          ...getNewDataSet(CONFIG.charts.stats.gitHub),
+          ...getNewDataSet(theme.stats.gitHub),
           data: gitHubContributions,
           fill: 'origin',
           yAxisID: 'yContributionAxis',
         },
         {
-          ...getNewDataSet(CONFIG.charts.stats.npm),
+          ...getNewDataSet(theme.stats.npm),
           data: npmDownloads,
           fill: '-1',
           yAxisID: 'yDownloadAxis',
@@ -55,14 +56,14 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
           },
           ticks: {
             autoSkip: false,
-            color: CONFIG.charts.tickColor,
+            color: theme.tick,
             maxRotation: 0,
             minRotation: 0,
           },
         },
         yContributionAxis: {
           grid: {
-            color: CONFIG.charts.separatorColor,
+            color: theme.separator,
             drawBorder: false,
             drawTicks: false,
           },
@@ -73,7 +74,7 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
             callback: (val, index) => {
               return index === 0 ? '' : Intl.NumberFormat('en', { notation: 'compact' }).format(Number(val))
             },
-            color: CONFIG.charts.tickColor,
+            color: theme.tick,
             count: CONFIG.charts.stats.yAxis.tickCount,
             labelOffset: CONFIG.charts.stats.yAxis.labelOffset,
             mirror: true,
@@ -83,7 +84,7 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
         },
         yDownloadAxis: {
           grid: {
-            color: CONFIG.charts.separatorColor,
+            color: theme.separator,
             drawBorder: false,
             drawTicks: false,
           },
@@ -93,7 +94,7 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
             callback: (val, index) => {
               return index === 0 ? '' : Intl.NumberFormat('en', { notation: 'compact' }).format(Number(val))
             },
-            color: CONFIG.charts.tickColor,
+            color: theme.tick,
             count: CONFIG.charts.stats.yAxis.tickCount,
             labelOffset: CONFIG.charts.stats.yAxis.labelOffset,
             mirror: true,
@@ -109,9 +110,9 @@ export async function getStatsChartData({ gitHub, npm }: Stats) {
   return chart.toDataUrl()
 }
 
-function getNewChart(width: number, height: number) {
+function getNewChart(width: number, height: number, backgroundColor: string) {
   const chart = new QuickChart()
-  chart.setBackgroundColor(CONFIG.charts.backgroundColor)
+  chart.setBackgroundColor(backgroundColor)
   chart.setDevicePixelRatio(CONFIG.charts.devicePixelRatio)
   chart.setVersion('3')
   chart.setWidth(width)

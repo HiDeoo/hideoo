@@ -1,17 +1,46 @@
+export const THEMES = ['dark', 'light'] as const
+
 export const CONFIG = {
   charts: {
-    backgroundColor: 'transparent',
-    devicePixelRatio: 1,
-    separatorColor: '#ff0fff',
-    stats: {
-      fileName: 'stats.svg',
-      height: 220,
-      gitHub: {
-        backgroundColor: 'rgba(64, 196, 99, 0.3)',
-        borderColor: '#39d353',
+    colors: {
+      dark: {
+        background: 'transparent',
+        separator: '#ff0fff',
+        stats: {
+          gitHub: {
+            backgroundColor: 'rgba(64, 196, 99, 0.3)',
+            borderColor: '#39d353',
+          },
+          legend: '#5000ff',
+          npm: {
+            backgroundColor: 'rgba(255, 196, 99, 0.3)',
+            borderColor: '#ffd353',
+          },
+        },
+        tick: '#009999',
       },
+      light: {
+        background: 'transparent',
+        separator: '#ff0fff',
+        stats: {
+          gitHub: {
+            backgroundColor: 'rgba(64, 196, 99, 0.3)',
+            borderColor: '#39d353',
+          },
+          legend: '#5000ff',
+          npm: {
+            backgroundColor: 'rgba(255, 196, 99, 0.3)',
+            borderColor: '#ffd353',
+          },
+        },
+        tick: '#009999',
+      },
+    },
+    devicePixelRatio: 1,
+    stats: {
+      fileName: 'stats',
+      height: 220,
       legend: {
-        color: '#5000ff',
         margin: {
           x: 14,
           y: 18,
@@ -19,10 +48,6 @@ export const CONFIG = {
         width: 180,
       },
       offset: -20,
-      npm: {
-        backgroundColor: 'rgba(255, 196, 99, 0.3)',
-        borderColor: '#ffd353',
-      },
       width: 850,
       wrapperBorder: 1,
       yAxis: {
@@ -31,6 +56,7 @@ export const CONFIG = {
       },
     },
     tension: 0.275,
-    tickColor: '#009999',
   },
 }
+
+export type Theme = typeof CONFIG.charts.colors[typeof THEMES[number]]
