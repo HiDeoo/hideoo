@@ -1,17 +1,24 @@
 import dotenv from 'dotenv-flow'
 
-import { fetchGitHubStats } from './libs/github'
-import { fetchNpmStats } from './libs/npm'
-import { generateStatsChart } from './libs/svg'
+import { fetchGitHubLanguages, fetchGitHubContributions } from './libs/github'
+import { generateReadme } from './libs/markdown'
+import { fetchNpmDownloads } from './libs/npm'
+import { generateLanguagesChart, generateStatsChart } from './libs/svg'
 
 dotenv.config()
 
 async function run() {
   try {
-    const gitHub = await fetchGitHubStats()
-    const npm = await fetchNpmStats()
+    const gitHubContributions = await fetchGitHubContributions()
+    const npmDownloads = await fetchNpmDownloads()
 
-    await generateStatsChart({ gitHub, npm })
+    await generateStatsChart({ gitHub: gitHubContributions, npm: npmDownloads })
+
+    const gitHubLanguages = await fetchGitHubLanguages()
+
+    await generateLanguagesChart(gitHubLanguages)
+
+    await generateReadme()
   } catch (error) {
     console.error(error)
 

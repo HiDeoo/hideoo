@@ -4,8 +4,9 @@ import QuickChart from 'quickchart-js'
 
 import { CONFIG, type Theme } from '../config'
 
-import { type GitHubStats } from './github'
-import { type NpmStats } from './npm'
+import { getLanguagesChartColors, getStatsChartColors } from './color'
+import { type GitHubLanguages, type GitHubContributions } from './github'
+import { type NpmDownloads } from './npm'
 
 export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
   const chart = getNewChart(
@@ -14,26 +15,26 @@ export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
     theme.background
   )
 
-  const gitHubContributions = gitHub.contributions.map((contribution) => contribution.count)
-  const npmDownloads = npm.downloads.map((download) => download.count)
+  const gitHubContributions = gitHub.all.map((contribution) => contribution.count)
+  const npmDownloads = npm.all.map((download) => download.count)
 
   chart.setConfig({
     data: {
       datasets: [
         {
-          ...getNewDataSet(theme.stats.gitHub),
+          ...getNewDataSet(getStatsChartColors(theme.stats.gitHub)),
           data: gitHubContributions,
           fill: 'origin',
           yAxisID: 'yContributionAxis',
         },
         {
-          ...getNewDataSet(theme.stats.npm),
+          ...getNewDataSet(getStatsChartColors(theme.stats.npm)),
           data: npmDownloads,
           fill: '-1',
           yAxisID: 'yDownloadAxis',
         },
       ],
-      labels: gitHub.contributions.map((contribution, index) =>
+      labels: gitHub.all.map((contribution, index) =>
         index % 2 !== 0 ? format(new Date(contribution.date), 'MMM yyyy') : ''
       ),
     },
@@ -110,6 +111,47 @@ export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
   return chart.toDataUrl()
 }
 
+export async function getLanguagesChartData(languages: GitHubLanguages, theme: Theme) {
+  const chart = getNewChart(
+    CONFIG.charts.languages.width - CONFIG.charts.stats.wrapperBorder * 2,
+    CONFIG.charts.languages.height - CONFIG.charts.stats.wrapperBorder * 2,
+    theme.background
+  )
+
+  const distribution = languages.map((language) => language[1])
+  const { backgroundColor, borderColor, legendColor } = getLanguagesColors(languages, theme)
+
+  chart.setConfig({
+    data: {
+      datasets: [
+        {
+          ...getNewDataSet(),
+          backgroundColor,
+          borderColor,
+          circumference: 180,
+          data: distribution,
+        },
+      ],
+      labels: languages.map((language) => language),
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          display: false,
+        },
+        legend: {
+          display: false,
+        },
+      },
+    },
+    type: 'doughnut',
+  })
+
+  const data = await chart.toDataUrl()
+
+  return { data, legendColor }
+}
+
 function getNewChart(width: number, height: number, backgroundColor: string) {
   const chart = new QuickChart()
   chart.setBackgroundColor(backgroundColor)
@@ -130,7 +172,47 @@ function getNewDataSet(options: Partial<ChartDataset> = {}) {
   }
 }
 
+function isKnownLanguage(name: string, theme: Theme): name is keyof typeof theme.languages.known {
+  return name in theme.languages.known
+}
+
+function getLanguagesColors(languages: GitHubLanguages, theme: Theme) {
+  const colors: LanguagesColors = { backgroundColor: [], borderColor: [], legendColor: [] }
+  let unknownColorsCount = 0
+
+  for (const [name] of languages) {
+    let baseColor: string
+
+    if (isKnownLanguage(name, theme)) {
+      baseColor = theme.languages.known[name]
+    } else {
+      const unknownBaseColor = theme.languages.unknown[unknownColorsCount]
+
+      if (!unknownBaseColor) {
+        throw new Error(`Missing color (or fallback color) for unknown language '${name}'.`)
+      }
+
+      baseColor = unknownBaseColor
+      unknownColorsCount++
+    }
+
+    const { backgroundColor, borderColor, legendColor } = getLanguagesChartColors(baseColor)
+
+    colors.backgroundColor.push(backgroundColor)
+    colors.borderColor.push(borderColor)
+    colors.legendColor.push(legendColor)
+  }
+
+  return colors
+}
+
 export interface Stats {
-  gitHub: GitHubStats
-  npm: NpmStats
+  gitHub: GitHubContributions
+  npm: NpmDownloads
+}
+
+interface LanguagesColors {
+  backgroundColor: string[]
+  borderColor: string[]
+  legendColor: string[]
 }

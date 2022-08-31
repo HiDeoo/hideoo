@@ -1,0 +1,51 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 0 __VIEW_BOX_WIDTH__ __VIEW_BOX_HEIGHT__"
+  style="width: __VIEW_BOX_WIDTH__px;"
+>
+  <style>
+    .wrapper {
+      fill-opacity: 0;
+      stroke: __SEPARATOR_COLOR__;
+      stroke-width: 1;
+    }
+
+    .legend {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji';
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .language1 {
+      fill: __LANGUAGE_1_COLOR__;
+    }
+
+    .language2 {
+      fill: __LANGUAGE_2_COLOR__;
+    }
+
+    .language3 {
+      fill: __LANGUAGE_3_COLOR__;
+    }
+
+    .language4 {
+      fill: __LANGUAGE_4_COLOR__;
+    }
+
+    .language5 {
+      fill: __LANGUAGE_5_COLOR__;
+    }
+  </style>
+  <image xlink:href="__CHART_DATA__" x="0" y="__CHART_OFFSET__" width="__CHART_WIDTH__" height="__CHART_HEIGHT__" />
+  <rect class="wrapper" x="0.5" y="0.5" width="__WRAPPER_WIDTH__" height="__WRAPPER_HEIGHT__" rx="6" />
+  <line x1="__LEGEND_SEPARATOR_X__" y1="0" x2="__LEGEND_SEPARATOR_X__" y2="100%" stroke="__SEPARATOR_COLOR__" />
+  <text class="legend" x="__LEGEND_X__" y="__LEGEND_Y__">
+    <tspan class="language1" x="__LEGEND_X__" dy="__LEGEND_Y__">__LANGUAGE_1__</tspan>
+    <tspan class="language2" x="__LEGEND_X__" dy="1.6em">__LANGUAGE_2__</tspan>
+    <tspan class="language3" x="__LEGEND_X__" dy="1.6em">__LANGUAGE_3__</tspan>
+    <tspan class="language4" x="__LEGEND_X__" dy="1.6em">__LANGUAGE_4__</tspan>
+    <tspan class="language5" x="__LEGEND_X__" dy="1.6em">__LANGUAGE_5__</tspan>
+  </text>
+</svg>

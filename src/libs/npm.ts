@@ -26,7 +26,7 @@ export async function fetchNpmStats(): Promise<NpmStats> {
   const pkgs = await fetchPackages(process.env.NPM_LOGIN)
   const downloads = await fetchPackagesDownloads(pkgs)
 
-  return { downloads, totalDownloads: downloads.reduce((total, { count }) => total + count, 0) }
+  return { all: downloads, total: downloads.reduce((total, { count }) => total + count, 0) }
 }
 
 async function fetchPackages(author: string): Promise<string[]> {
@@ -46,7 +46,7 @@ async function fetchPackages(author: string): Promise<string[]> {
   })
 }
 
-async function fetchPackagesDownloads(pkgs: string[]): Promise<NpmStats['downloads']> {
+async function fetchPackagesDownloads(pkgs: string[]): Promise<NpmDownloads['all']> {
   const downloads: Record<string, number> = {}
 
   const periods = getLastYearPeriods()
@@ -108,12 +108,12 @@ function getLastYearPeriods() {
   return periods
 }
 
-export interface NpmStats {
-  downloads: {
+export interface NpmDownloads {
+  all: {
     count: number
     date: Date // yyyy-MM
   }[]
-  totalDownloads: number
+  total: number
 }
 
 interface NpmSearchResult {

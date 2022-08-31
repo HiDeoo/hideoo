@@ -8,6 +8,7 @@ specifiers:
   '@types/dotenv-flow': 3.2.0
   '@types/node': 16.11.56
   chart.js: 3.9.1
+  colord: 2.9.3
   date-fns: 2.29.2
   dotenv-flow: 3.2.0
   eslint: 8.22.0
@@ -20,6 +21,7 @@ specifiers:
   typescript: 4.8.2
 
 dependencies:
+  colord: 2.9.3
   date-fns: 2.29.2
   dotenv-flow: 3.2.0
   node-fetch: 3.2.10
@@ -657,6 +659,10 @@ packages:
   /color-name/1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
     dev: true
+
+  /colord/2.9.3:
+    resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
+    dev: false
 
   /colorette/2.0.19:
     resolution: {integrity: sha512-3tlv/dIP7FWvj3BsbHrGLJ6l/oKh1O3TcgBqMn+yyCagOxc23fyzDS6HypQbgxWbkpDnf52p1LuR4eWDQ/K9WQ==}

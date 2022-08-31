@@ -1,6 +1,6 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/languages-dark.svg">
-  <img alt="// TODO" src="assets/languages-light.svg" style="max-width: 192px" align="right" />
+  <img alt="// TODO" src="assets/languages-light.svg" style="max-width: __LANGUAGE_CHART_MAX_WIDTH__px" align="right" />
 </picture>
 
 ## Ahoy 👋
