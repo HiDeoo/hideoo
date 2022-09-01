@@ -3,26 +3,7 @@ import fetch from 'node-fetch'
 
 const periodFormat = 'yyyy-MM-dd'
 
-export async function fetchNpmStats(): Promise<NpmStats> {
-  // FIXME(HiDeoo)
-  // return Promise.resolve({
-  //   downloads: [
-  //     { count: 54_401, date: new Date('2022-08-01T00:00:00.000Z') },
-  //     { count: 53_112, date: new Date('2022-07-01T00:00:00.000Z') },
-  //     { count: 50_070, date: new Date('2022-06-01T00:00:00.000Z') },
-  //     { count: 47_640, date: new Date('2022-05-01T00:00:00.000Z') },
-  //     { count: 43_722, date: new Date('2022-04-01T00:00:00.000Z') },
-  //     { count: 45_987, date: new Date('2022-03-01T00:00:00.000Z') },
-  //     { count: 37_553, date: new Date('2022-02-01T00:00:00.000Z') },
-  //     { count: 34_544, date: new Date('2022-01-01T00:00:00.000Z') },
-  //     { count: 29_528, date: new Date('2021-12-01T00:00:00.000Z') },
-  //     { count: 29_764, date: new Date('2021-11-01T00:00:00.000Z') },
-  //     { count: 26_378, date: new Date('2021-10-01T00:00:00.000Z') },
-  //     { count: 28_515, date: new Date('2021-09-01T00:00:00.000Z') },
-  //     { count: 25_515, date: new Date('2021-08-01T00:00:00.000Z') },
-  //   ].reverse(),
-  // })
-
+export async function fetchNpmDownloads(): Promise<NpmDownloads> {
   const pkgs = await fetchPackages(process.env.NPM_LOGIN)
   const downloads = await fetchPackagesDownloads(pkgs)
 
