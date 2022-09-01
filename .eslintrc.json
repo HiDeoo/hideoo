@@ -1,0 +1,6 @@
+{
+  "extends": ["@hideoo"],
+  "rules": {
+    "no-console": "off"
+  }
+}
