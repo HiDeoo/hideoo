@@ -45,6 +45,10 @@ jobs:
 
       - name: Build
         run: pnpm start
+        env:
+          GH_LOGIN: ${{ secrets.GH_LOGIN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_LOGIN: ${{ secrets.NPM_LOGIN }}
 
       - name: Commit changes
         run: |-
