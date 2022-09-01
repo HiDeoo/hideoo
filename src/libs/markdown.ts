@@ -7,7 +7,7 @@ export function generateReadme() {
     'README.md',
     'README.md',
     {
-      LANGUAGE_CHART_MAX_WIDTH:
+      LANGUAGE_CHART_WIDTH:
         CONFIG.charts.languages.width +
         CONFIG.charts.languages.legend.width +
         CONFIG.charts.languages.legend.margin.x +
