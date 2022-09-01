@@ -44,7 +44,7 @@ export async function fetchGitHubLanguages(): Promise<GitHubLanguages> {
       }
       `,
       variables: {
-        login: process.env.GITHUB_LOGIN,
+        login: process.env.GH_LOGIN,
       },
     })
   )
@@ -157,7 +157,7 @@ async function fetchContributionsBetween(from: Date, to: Date) {
       `,
       variables: {
         from: addMinutes(from, new Date().getTimezoneOffset() * -1),
-        login: process.env.GITHUB_LOGIN,
+        login: process.env.GH_LOGIN,
         to: addMinutes(to, new Date().getTimezoneOffset() * -1),
       },
     })
@@ -175,7 +175,7 @@ async function fetchContributionsBetween(from: Date, to: Date) {
 function fetchGraphQLApi(body: BodyInit) {
   return fetch('https://api.github.com/graphql', {
     headers: {
-      Authorization: `bearer ${process.env.GITHUB_TOKEN}`,
+      Authorization: `bearer ${process.env.GH_TOKEN}`,
       'Content-Type': 'application/json',
     },
     body,
@@ -200,8 +200,8 @@ interface ContributionsCollection {
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      GITHUB_LOGIN: string
-      GITHUB_TOKEN: string
+      GH_LOGIN: string
+      GH_TOKEN: string
     }
   }
 }
