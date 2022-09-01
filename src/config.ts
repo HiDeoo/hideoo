@@ -74,7 +74,7 @@ export const CONFIG = {
           x: 14,
           y: 17,
         },
-        width: 170,
+        width: 168,
       },
       offset: -20,
       width: 850,
