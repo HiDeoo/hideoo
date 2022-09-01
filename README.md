@@ -1,9 +1,9 @@
+### Ahoy 👋
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/languages-dark.svg">
-  <img alt="// TODO" src="assets/languages-light.svg" style="max-width: 192px" align="right" />
+  <img alt="HiDeoo's most used languages" src="assets/languages-light.svg" width="192" align="right" />
 </picture>
-
-## Ahoy 👋
 
 - Mostly **TypeScript**, **React** and some **Go**.
 - All my projects are available on [GitHub](https://github.com/HiDeoo).
@@ -14,5 +14,5 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg">
-  <img alt="// TODO" src="assets/stats-light.svg" />
+  <img alt="HiDeoo's GitHub contributions and npm downloads" src="assets/stats-light.svg" />
 </picture>
