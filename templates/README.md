@@ -5,7 +5,7 @@
   <img alt="HiDeoo's most used languages" src="assets/languages-light.svg" width="__LANGUAGE_CHART_WIDTH__" align="right" />
 </picture>
 
-- Mostly **TypeScript**, **React** and some **Go**.
+- Mostly **TypeScript**, **Astro**, **React** and some **Go**.
 - All my projects are available on [GitHub](https://github.com/HiDeoo).
 - Check out my [dotfiles](https://github.com/HiDeoo/dotfiles).
 - Convert caffeine into code.
