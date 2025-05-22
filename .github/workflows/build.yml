@@ -37,8 +37,8 @@ jobs:
 
       - name: Commit changes
         run: |-
-          git config user.name "HiDeooBot"
-          git config user.email "actions@users.noreply.github.com"
+          git config user.name "HiDeoo"
+          git config user.email "494699+HiDeoo@users.noreply.github.com"
           git add -A
           git commit -m "docs(build): update readme" || exit 0
           git push
