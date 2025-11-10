@@ -2,7 +2,7 @@ import dotenv from 'dotenv-flow'
 
 import { fetchGitHubLanguages, fetchGitHubContributions } from './libs/github'
 import { generateReadme } from './libs/markdown'
-import { fetchNpmDownloads } from './libs/npm'
+import { fetchRecentNpmDownloads, persistRecentNpmDownloads } from './libs/npm'
 import { generateLanguagesChart, generateStatsChart } from './libs/svg'
 
 dotenv.config()
@@ -10,7 +10,8 @@ dotenv.config()
 async function run() {
   try {
     const gitHubContributions = await fetchGitHubContributions()
-    const npmDownloads = await fetchNpmDownloads()
+    const recentNpmDownloads = await fetchRecentNpmDownloads()
+    const npmDownloads = await persistRecentNpmDownloads(recentNpmDownloads)
 
     await generateStatsChart({ gitHub: gitHubContributions, npm: npmDownloads })
 

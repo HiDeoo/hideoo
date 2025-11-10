@@ -6,7 +6,7 @@ import { CONFIG, type Theme } from '../config'
 
 import { getLanguagesChartColors, getStatsChartColors } from './color'
 import { type GitHubLanguages, type GitHubContributions } from './github'
-import { type NpmDownloads } from './npm'
+import { type NpmYearDownloads } from './npm'
 
 export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
   const chart = getNewChart(
@@ -208,7 +208,7 @@ function getLanguagesColors(languages: GitHubLanguages, theme: Theme) {
 
 export interface Stats {
   gitHub: GitHubContributions
-  npm: NpmDownloads
+  npm: NpmYearDownloads
 }
 
 interface LanguagesColors {
