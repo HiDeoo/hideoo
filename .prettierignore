@@ -6,5 +6,6 @@ build
 coverage
 dist
 dist-ssr
+history.json
 out
 pnpm-lock.yaml
