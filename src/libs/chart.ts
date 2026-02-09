@@ -29,7 +29,9 @@ export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
       (today.getTime() - estimateStart.getTime()) / (estimateEnd.getTime() - estimateStart.getTime())
     )
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     gitHubContributions = [...gitHubContributions.slice(0, -1), gitHubContributions.at(-1)! / estimateRatio]
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     npmDownloads = [...npmDownloads.slice(0, -1), npmDownloads.at(-1)! / estimateRatio]
   }
 
@@ -178,14 +180,14 @@ function getNewChart(width: number, height: number, backgroundColor: string) {
   return chart
 }
 
-function getNewDataSet(options: Partial<ChartDataset> = {}, withEstimate = false): Partial<ChartDataset> {
+function getNewDataSet(options: Partial<ChartDataset> = {}, withEstimate = false) {
   return {
     borderWidth: 1,
     pointRadius: 0,
     tension: CONFIG.charts.tension,
     segment: withEstimate ? { borderDash: (ctx) => (ctx.p1DataIndex === 12 ? [5, 5] : undefined) } : {},
     ...options,
-  }
+  } as Partial<ChartDataset<'line'>>
 }
 
 function isKnownLanguage(name: string, theme: Theme): name is keyof typeof theme.languages.known {
