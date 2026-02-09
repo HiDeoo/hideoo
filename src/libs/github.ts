@@ -5,12 +5,16 @@ import fetch, { type BodyInit } from 'node-fetch'
 import { CONFIG } from '../config'
 
 export async function fetchGitHubContributions(): Promise<GitHubContributions> {
+  // Today.
   let to = new Date()
+  // 11 months ago, and the first day of that month.
   let from = startOfMonth(subMonths(to, 11))
 
   const elevenMonthsData = await fetchContributionsBetween(from, to)
 
+  // 12th month ago, and the last day of that month, which is the day before the first day of the 11th month.
   to = endOfDay(subDays(from, 1))
+  // 12 months ago, and the first day of that month.
   from = startOfMonth(to)
 
   const twelfthMonthData = await fetchContributionsBetween(from, to)

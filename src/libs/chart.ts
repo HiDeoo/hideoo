@@ -1,5 +1,5 @@
 import { type ChartDataset } from 'chart.js'
-import { format } from 'date-fns'
+import { endOfMonth, format, isSameDay, startOfMonth } from 'date-fns'
 import QuickChart from 'quickchart-js'
 
 import { CONFIG, type Theme } from '../config'
@@ -15,20 +15,37 @@ export async function getStatsChartData({ gitHub, npm }: Stats, theme: Theme) {
     theme.background
   )
 
-  const gitHubContributions = gitHub.all.map((contribution) => contribution.count)
-  const npmDownloads = npm.all.map((download) => download.count)
+  let gitHubContributions = gitHub.all.map((contribution) => contribution.count)
+  let npmDownloads = npm.all.map((download) => download.count)
+
+  const today = new Date()
+  const estimateStart = startOfMonth(today)
+  const estimateEnd = endOfMonth(today)
+
+  const shouldAddEstimates = !isSameDay(today, estimateEnd)
+
+  if (shouldAddEstimates) {
+    const estimateRatio = clampRatio(
+      (today.getTime() - estimateStart.getTime()) / (estimateEnd.getTime() - estimateStart.getTime())
+    )
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    gitHubContributions = [...gitHubContributions.slice(0, -1), gitHubContributions.at(-1)! / estimateRatio]
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    npmDownloads = [...npmDownloads.slice(0, -1), npmDownloads.at(-1)! / estimateRatio]
+  }
 
   chart.setConfig({
     data: {
       datasets: [
         {
-          ...getNewDataSet(getStatsChartColors(theme.stats.gitHub)),
+          ...getNewDataSet(getStatsChartColors(theme.stats.gitHub), shouldAddEstimates),
           data: gitHubContributions,
           fill: 'origin',
           yAxisID: 'yContributionAxis',
         },
         {
-          ...getNewDataSet(getStatsChartColors(theme.stats.npm)),
+          ...getNewDataSet(getStatsChartColors(theme.stats.npm), shouldAddEstimates),
           data: npmDownloads,
           fill: '-1',
           yAxisID: 'yDownloadAxis',
@@ -163,13 +180,14 @@ function getNewChart(width: number, height: number, backgroundColor: string) {
   return chart
 }
 
-function getNewDataSet(options: Partial<ChartDataset> = {}) {
+function getNewDataSet(options: Partial<ChartDataset> = {}, withEstimate = false) {
   return {
     borderWidth: 1,
     pointRadius: 0,
     tension: CONFIG.charts.tension,
+    segment: withEstimate ? { borderDash: (ctx) => (ctx.p1DataIndex === 12 ? [5, 5] : undefined) } : {},
     ...options,
-  }
+  } as Partial<ChartDataset<'line'>>
 }
 
 function isKnownLanguage(name: string, theme: Theme): name is keyof typeof theme.languages.known {
@@ -204,6 +222,12 @@ function getLanguagesColors(languages: GitHubLanguages, theme: Theme) {
   }
 
   return colors
+}
+
+function clampRatio(value: number): number {
+  if (value < 0) return 0
+  if (value > 1) return 1
+  return value
 }
 
 export interface Stats {
