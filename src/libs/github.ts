@@ -7,10 +7,20 @@ import { CONFIG } from '../config'
 export async function fetchGitHubContributions(): Promise<GitHubContributions> {
   // Today.
   let to = new Date()
-  // 11 months ago, and the first day of that month.
-  let from = startOfMonth(subMonths(to, 11))
+  // 5 months ago, and the first day of that month.
+  let from = startOfMonth(subMonths(to, 5))
 
-  const elevenMonthsData = await fetchContributionsBetween(from, to)
+  // GitHub suddenly failed with RESOURCE_LIMITS_EXCEEDED, so we now fetch the current and previous five calendar
+  // months, the preceding six months, and finally the month from 12 months ago.
+  // Related: https://github.com/orgs/community/discussions/202200
+  const recentContributions = await fetchContributionsBetween(from, to)
+
+  // 6 months ago, and the last day of that month.
+  to = endOfDay(subDays(from, 1))
+  // 11 months ago, and the first day of that month.
+  from = startOfMonth(subMonths(to, 5))
+
+  const earlierContributions = await fetchContributionsBetween(from, to)
 
   // 12th month ago, and the last day of that month, which is the day before the first day of the 11th month.
   to = endOfDay(subDays(from, 1))
@@ -19,20 +29,44 @@ export async function fetchGitHubContributions(): Promise<GitHubContributions> {
 
   const twelfthMonthData = await fetchContributionsBetween(from, to)
 
-  return parseContributions(mergeContributions(elevenMonthsData, twelfthMonthData))
+  return parseContributions(
+    mergeContributions(mergeContributions(recentContributions, earlierContributions), twelfthMonthData)
+  )
 }
 
 export async function fetchGitHubLanguages(): Promise<GitHubLanguages> {
+  // Today.
+  let to = new Date()
+  // 6 months ago.
+  let from = subMonths(to, 6)
+
+  // GitHub suddenly failed with RESOURCE_LIMITS_EXCEEDED, so we now fetch languages for repositories with contributions
+  // in the last six months, then in the six months before that, and merge the results by repository.
+  // Related: https://github.com/orgs/community/discussions/202200
+  const recentLanguages = await fetchLanguagesBetween(from, to)
+
+  // 6 months ago.
+  to = from
+  // 12 months ago.
+  from = subMonths(to, 6)
+
+  const earlierLanguages = await fetchLanguagesBetween(from, to)
+
+  return parseLanguages([recentLanguages, earlierLanguages])
+}
+
+async function fetchLanguagesBetween(from: Date, to: Date) {
   console.info('Fetching GitHub user languages')
 
-  const response = await fetchGraphQLApi(
+  return fetchGraphQLApi<ContributionsCollection>(
     JSON.stringify({
       query: `
-      query Languages($login: String!) {
+      query Languages($login: String!, $from: DateTime!, $to: DateTime!) {
         user(login: $login) {
-          contributionsCollection {
+          contributionsCollection(from: $from, to: $to) {
             commitContributionsByRepository(maxRepositories: 100) {
               repository {
+                id
                 languages(first: 10, orderBy: { direction: DESC, field: SIZE }) {
                   edges {
                     size
@@ -48,18 +82,12 @@ export async function fetchGitHubLanguages(): Promise<GitHubLanguages> {
       }
       `,
       variables: {
+        from,
         login: process.env.GH_LOGIN,
+        to,
       },
     })
   )
-
-  if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText} while fetching GitHub user contributions.`)
-  }
-
-  const json = (await response.json()) as { data: ContributionsCollection }
-
-  return parseLanguages(json.data)
 }
 
 function mergeContributions(dataA: ContributionsCollection, dataB: ContributionsCollection) {
@@ -73,23 +101,28 @@ function mergeContributions(dataA: ContributionsCollection, dataB: Contributions
   return dataA
 }
 
-function parseLanguages(data: ContributionsCollection): GitHubLanguages {
+function parseLanguages(data: ContributionsCollection[]): GitHubLanguages {
+  const parsedRepositories = new Set<string>()
   const allLanguages: Record<string, number> = {}
   let totalSize = 0
 
-  for (const contributions of data.user.contributionsCollection.commitContributionsByRepository) {
-    if (!contributions.repository.languages?.edges) {
-      continue
-    }
-
-    for (const languageEdge of contributions.repository.languages.edges) {
-      if (!languageEdge) {
+  for (const contributionsCollection of data) {
+    for (const contributions of contributionsCollection.user.contributionsCollection.commitContributionsByRepository) {
+      if (parsedRepositories.has(contributions.repository.id) || !contributions.repository.languages?.edges) {
         continue
       }
 
-      allLanguages[languageEdge.node.name] = (allLanguages[languageEdge.node.name] ?? 0) + languageEdge.size
+      parsedRepositories.add(contributions.repository.id)
 
-      totalSize += languageEdge.size
+      for (const languageEdge of contributions.repository.languages.edges) {
+        if (!languageEdge) {
+          continue
+        }
+
+        allLanguages[languageEdge.node.name] = (allLanguages[languageEdge.node.name] ?? 0) + languageEdge.size
+
+        totalSize += languageEdge.size
+      }
     }
   }
 
@@ -140,7 +173,7 @@ function parseContributions(data: ContributionsCollection): GitHubContributions 
 async function fetchContributionsBetween(from: Date, to: Date) {
   console.info('Fetching GitHub user contributions')
 
-  const response = await fetchGraphQLApi(
+  const data = await fetchGraphQLApi<ContributionsCollection>(
     JSON.stringify({
       query: `
       query Contributions($login: String!, $from: DateTime!, $to: DateTime!) {
@@ -167,17 +200,11 @@ async function fetchContributionsBetween(from: Date, to: Date) {
     })
   )
 
-  if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText} while fetching GitHub user contributions.`)
-  }
-
-  const json = (await response.json()) as { data: ContributionsCollection }
-
-  return json.data
+  return data
 }
 
-function fetchGraphQLApi(body: BodyInit) {
-  return fetch('https://api.github.com/graphql', {
+async function fetchGraphQLApi<T>(body: BodyInit): Promise<T> {
+  const response = await fetch('https://api.github.com/graphql', {
     headers: {
       Authorization: `bearer ${process.env.GH_TOKEN}`,
       'Content-Type': 'application/json',
@@ -185,6 +212,22 @@ function fetchGraphQLApi(body: BodyInit) {
     body,
     method: 'POST',
   })
+
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText} while fetching the GitHub GraphQL API.`)
+  }
+
+  const result = (await response.json()) as GraphQLResponse<T>
+
+  if (result.errors?.length) {
+    throw new Error(`GitHub GraphQL API: ${result.errors.map((error) => error.message).join(' - ')}`)
+  }
+
+  if (!result.data) {
+    throw new Error('GitHub GraphQL API returned no data.')
+  }
+
+  return result.data
 }
 
 export interface GitHubContributions {
@@ -199,6 +242,11 @@ export type GitHubLanguages = [name: string, count: number][]
 
 interface ContributionsCollection {
   user: Pick<User, 'contributionsCollection'>
+}
+
+interface GraphQLResponse<T> {
+  data?: T
+  errors?: { message: string }[]
 }
 
 declare global {
