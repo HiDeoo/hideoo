@@ -25,7 +25,7 @@ export async function fetchGitHubContributions(): Promise<GitHubContributions> {
 export async function fetchGitHubLanguages(): Promise<GitHubLanguages> {
   console.info('Fetching GitHub user languages')
 
-  const response = await fetchGraphQLApi(
+  const data = await fetchGraphQLApi<ContributionsCollection>(
     JSON.stringify({
       query: `
       query Languages($login: String!) {
@@ -53,13 +53,7 @@ export async function fetchGitHubLanguages(): Promise<GitHubLanguages> {
     })
   )
 
-  if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText} while fetching GitHub user contributions.`)
-  }
-
-  const json = (await response.json()) as { data: ContributionsCollection }
-
-  return parseLanguages(json.data)
+  return parseLanguages(data)
 }
 
 function mergeContributions(dataA: ContributionsCollection, dataB: ContributionsCollection) {
@@ -140,7 +134,7 @@ function parseContributions(data: ContributionsCollection): GitHubContributions 
 async function fetchContributionsBetween(from: Date, to: Date) {
   console.info('Fetching GitHub user contributions')
 
-  const response = await fetchGraphQLApi(
+  const data = await fetchGraphQLApi<ContributionsCollection>(
     JSON.stringify({
       query: `
       query Contributions($login: String!, $from: DateTime!, $to: DateTime!) {
@@ -167,17 +161,11 @@ async function fetchContributionsBetween(from: Date, to: Date) {
     })
   )
 
-  if (!response.ok) {
-    throw new Error(`${response.status}: ${response.statusText} while fetching GitHub user contributions.`)
-  }
-
-  const json = (await response.json()) as { data: ContributionsCollection }
-
-  return json.data
+  return data
 }
 
-function fetchGraphQLApi(body: BodyInit) {
-  return fetch('https://api.github.com/graphql', {
+async function fetchGraphQLApi<T>(body: BodyInit): Promise<T> {
+  const response = await fetch('https://api.github.com/graphql', {
     headers: {
       Authorization: `bearer ${process.env.GH_TOKEN}`,
       'Content-Type': 'application/json',
@@ -185,6 +173,22 @@ function fetchGraphQLApi(body: BodyInit) {
     body,
     method: 'POST',
   })
+
+  if (!response.ok) {
+    throw new Error(`${response.status}: ${response.statusText} while fetching the GitHub GraphQL API.`)
+  }
+
+  const result = (await response.json()) as GraphQLResponse<T>
+
+  if (result.errors?.length) {
+    throw new Error(`GitHub GraphQL API: ${result.errors.map((error) => error.message).join(' - ')}`)
+  }
+
+  if (!result.data) {
+    throw new Error('GitHub GraphQL API returned no data.')
+  }
+
+  return result.data
 }
 
 export interface GitHubContributions {
@@ -199,6 +203,11 @@ export type GitHubLanguages = [name: string, count: number][]
 
 interface ContributionsCollection {
   user: Pick<User, 'contributionsCollection'>
+}
+
+interface GraphQLResponse<T> {
+  data?: T
+  errors?: { message: string }[]
 }
 
 declare global {
